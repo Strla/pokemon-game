@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import { colors, fonts } from "./theme";
 import { ReactComponent as KodiLogo } from "../../assets/svg/Kodi-logo.svg";
+import { ReactComponent as Arrow } from "../../assets/svg/arrow.svg";
 
 export const Button = styled.button`
   border: 5px solid ${colors.blueLight};
@@ -21,9 +22,14 @@ export const Button = styled.button`
 
 export const Main = styled.main`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${(props) =>
+    props.isGame &&
+    `
+    justify-content: space-between;
+  `}
 `;
 
 export const LogoImg = styled.img`
@@ -48,6 +54,10 @@ export const LogoIcon = styled(KodiLogo)`
   position: absolute;
   transform: rotate(-30deg);
   fill: ${colors.green};
+`;
+
+export const ArrowIcon = styled(Arrow)`
+  margin-bottom: 25px;
 `;
 
 export const Wrapper = styled.div`
