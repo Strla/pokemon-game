@@ -10,11 +10,15 @@ import {
   StatValue,
 } from "./PokemonStyle";
 
+import HealthBar from "../HealthBar/HealthBar";
+
 const Pokemon = ({ name, hp, attack, defense, speed, img }) => {
   return (
     <>
       <PlayerContainer>
-        <HealthContainer>{/* HEALTH BAR */}</HealthContainer>
+        <HealthContainer>
+          <HealthBar />
+        </HealthContainer>
         <NameAndImgContainer>
           <PlayerName>
             {name.charAt(0).toUpperCase() + name.slice(1)}

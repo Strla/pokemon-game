@@ -22,14 +22,31 @@ export const Button = styled.button`
 
 export const Main = styled.main`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100%;
 
   ${(props) =>
     props.isGame &&
     `
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
   `}
+`;
+
+export const Break = styled.div`
+  flex-basis: 100%;
+  height: 0;
+`;
+
+export const LogsAndMenuContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: "flex-start";
+  margin: 30px 50px;
+  align-content: "space-around";
+  gap: calc(15%);
 `;
 
 export const LogoImg = styled.img`
@@ -53,7 +70,6 @@ export const LogoIcon = styled(KodiLogo)`
   ${(props) => svgStyles(props)}
   position: absolute;
   transform: rotate(-30deg);
-  fill: ${colors.green};
 `;
 
 export const ArrowIcon = styled(Arrow)`
