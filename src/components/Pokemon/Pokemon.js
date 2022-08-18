@@ -12,12 +12,12 @@ import {
 
 import HealthBar from "../HealthBar/HealthBar";
 
-const Pokemon = ({ name, hp, attack, defense, speed, img }) => {
+const Pokemon = ({ name, hp, attack, defense, speed, img, value }) => {
   return (
     <>
       <PlayerContainer>
         <HealthContainer>
-          <HealthBar />
+          <HealthBar value={value} />
         </HealthContainer>
         <NameAndImgContainer>
           <PlayerName>
