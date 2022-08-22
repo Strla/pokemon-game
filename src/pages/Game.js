@@ -11,6 +11,8 @@ import {
   Main,
   Wrapper,
 } from "../lib/style/generalStyles";
+import { nanoid } from "@reduxjs/toolkit";
+import { Container } from "react-bootstrap";
 
 const Game = () => {
   const [opponentName, setOpponentName] = useState("");
@@ -29,13 +31,24 @@ const Game = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const [value, setValue] = useState();
+  const [playerHealthBar, setPlayerHealthBar] = useState();
+  const [opponentHealthBar, setOpponentHealthBar] = useState();
+  const [miss, setMiss] = useState(false);
+
+  const [logs, setLogs] = useState([]);
+
+  const [playerTurn, setPlayerTurn] = useState(null);
+  const [isOver, setIsOver] = useState(false);
 
   const randomIntFromInterval = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   const fetchNewOpponent = async () => {
+    setIsOver(false);
+    setPlayerHealthBar(100);
+    setOpponentHealthBar(100);
+
     let newOpponentId = randomIntFromInterval(1, 500);
 
     const opponentResponse = await fetch(
@@ -56,6 +69,8 @@ const Game = () => {
   };
 
   const fetchPokemons = async () => {
+    clearArray();
+    setIsOver(false);
     let playerId = randomIntFromInterval(1, 500);
     let opponentId = randomIntFromInterval(1, 500);
 
@@ -90,16 +105,113 @@ const Game = () => {
     setOpponentDefense(opponentData.stats[2].base_stat);
     setOpponentSpeed(opponentData.stats[5].base_stat);
 
+    setPlayerHealthBar(100);
+    setOpponentHealthBar(100);
     setLoading(false);
+
+    if (opponentData.stats[5].base_stat >= playerData.stats[5].base_stat) {
+      setPlayerTurn(false);
+    } else {
+      setPlayerTurn(true);
+    }
+  };
+
+  const addToLog = (id, message) => {
+    logs.push({ id: id, message: message });
+  };
+
+  const changeTurn = () => {
+    setPlayerTurn(!playerTurn);
   };
 
   const changeValue = () => {
-    setValue((Math.random() * 100).toFixed(2));
-    console.log(value);
+    let chance = Math.random();
+    if (playerHp > 0 && playerTurn) {
+      if (chance <= 0.2) {
+        addToLog(
+          nanoid(),
+          `${
+            opponentName.charAt(0).toUpperCase() + opponentName.slice(1)
+          } missed ${playerName.charAt(0).toUpperCase() + playerName.slice(1)}`
+        );
+        setMiss(true);
+        setTimeout(() => {
+          setMiss(false);
+        }, 1000);
+      } else {
+        const newHp = playerHp - ((opponentAttack / 2) * playerDefense) / 100;
+        let percentage = (newHp / playerHp) * 100;
+
+        addToLog(
+          nanoid(),
+          `${
+            opponentName.charAt(0).toUpperCase() + opponentName.slice(1)
+          } attacked ${
+            playerName.charAt(0).toUpperCase() + playerName.slice(1)
+          } for ${((opponentAttack / 2) * playerDefense) / 100} dmg`
+        );
+
+        if (percentage <= 0) {
+          percentage = 0;
+          setIsOver(true);
+          addToLog(
+            nanoid(),
+            `${playerName.charAt(0).toUpperCase() + playerName.slice(1)} died`
+          );
+        }
+        setPlayerHp(newHp);
+        setPlayerHealthBar(percentage);
+      }
+    } else if (opponentHp > 0 && !playerTurn) {
+      if (chance <= 0.2) {
+        addToLog(
+          nanoid(),
+          `${playerName.charAt(0).toUpperCase() + playerName.slice(1)} missed ${
+            opponentName.charAt(0).toUpperCase() + opponentName.slice(1)
+          }`
+        );
+        setMiss(true);
+        setTimeout(() => {
+          setMiss(false);
+        }, 1000);
+      } else {
+        const newHp = opponentHp - ((playerAttack / 2) * opponentDefense) / 100;
+        let percentage = (newHp / opponentHp) * 100;
+
+        addToLog(
+          nanoid(),
+          `${
+            playerName.charAt(0).toUpperCase() + playerName.slice(1)
+          } attacked ${
+            opponentName.charAt(0).toUpperCase() + opponentName.slice(1)
+          } for ${((playerAttack / 2) * opponentDefense) / 100} dmg`
+        );
+
+        if (percentage <= 0) {
+          percentage = 0;
+          setIsOver(true);
+          addToLog(
+            nanoid(),
+            `${
+              opponentName.charAt(0).toUpperCase() + opponentName.slice(1)
+            } died`
+          );
+        }
+        setOpponentHp(newHp);
+        setOpponentHealthBar(percentage);
+      }
+    }
+    changeTurn();
+  };
+
+  const clearArray = () => {
+    setLogs([{ id: nanoid(), message: "Players loaded" }]);
   };
 
   useEffect(() => {
     fetchPokemons();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -108,6 +220,7 @@ const Game = () => {
 
   return (
     <>
+      {(playerHp <= 0 || opponentHp <= 0) && <Container>GOTOVO</Container>}
       <Main isGame>
         <Pokemon
           name={opponentName}
@@ -116,9 +229,11 @@ const Game = () => {
           attack={opponentAttack}
           defense={opponentDefense}
           speed={opponentSpeed}
+          miss={miss}
+          healthBar={opponentHealthBar}
         />
         <Wrapper>
-          <ArrowIcon />
+          <ArrowIcon myTurn={playerTurn} />
           <Button onClick={() => changeValue()}>Attack!</Button>
         </Wrapper>
         <Pokemon
@@ -128,12 +243,17 @@ const Game = () => {
           attack={playerAttack}
           defense={playerDefense}
           speed={playerSpeed}
-          value={value}
+          healthBar={playerHealthBar}
+          miss={miss}
         />
         <Break />
         <LogsAndMenuContainer>
-          <Menu startNewGame={fetchPokemons} newOpponent={fetchNewOpponent} />
-          <Logs playerName={playerName} opponentName={opponentName} />
+          <Menu
+            startNewGame={fetchPokemons}
+            newOpponent={fetchNewOpponent}
+            isOver={isOver}
+          />
+          <Logs logs={logs} />
         </LogsAndMenuContainer>
       </Main>
     </>

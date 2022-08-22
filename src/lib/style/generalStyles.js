@@ -46,7 +46,7 @@ export const LogsAndMenuContainer = styled.div`
   justify-content: "flex-start";
   margin: 30px 50px;
   align-content: "space-around";
-  gap: calc(15%);
+  gap: calc(10%);
 `;
 
 export const LogoImg = styled.img`
@@ -74,6 +74,13 @@ export const LogoIcon = styled(KodiLogo)`
 
 export const ArrowIcon = styled(Arrow)`
   margin-bottom: 25px;
+
+  ${(props) =>
+    props.myTurn &&
+    `
+      rotate: 180deg;
+
+  `}
 `;
 
 export const Wrapper = styled.div`

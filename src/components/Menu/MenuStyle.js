@@ -1,7 +1,14 @@
 import styled from "styled-components";
 import { colors } from "../../lib/style/theme";
 
-export const MenuWrapper = styled.div``;
+export const MenuWrapper = styled.div`
+  ${(props) =>
+    props.isOver &&
+    `
+      visibility: hidden;
+
+  `}
+`;
 export const MenuTitle = styled.h3``;
 
 export const MenuContainer = styled.div`

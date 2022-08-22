@@ -13,4 +13,5 @@ export const LogsContainer = styled.div`
   border: 4px solid ${colors.yellow};
   padding: 20px 20px;
   text-align: left;
+  overflow: auto;
 `;

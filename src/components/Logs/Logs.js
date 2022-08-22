@@ -1,14 +1,14 @@
 import { LogsContainer, LogsTitle, LogsWrapper } from "./LogsStyle";
 
-const Logs = ({ playerName, opponentName }) => {
+const Logs = ({ logs }) => {
   return (
     <>
       <LogsWrapper>
         <LogsTitle>Logs</LogsTitle>
         <LogsContainer>
-          <p>
-            {playerName} attacked {opponentName} for 50 dmg
-          </p>
+          {logs.map((log) => {
+            return <p key={log.id}>{log.message}</p>;
+          })}
         </LogsContainer>
       </LogsWrapper>
     </>

@@ -1,10 +1,12 @@
 import { HpBar, Percentage } from "./HealthBarStyle";
 
-const HealthBar = ({ value, max, min }) => {
+const HealthBar = ({ healthBar, max, min }) => {
   return (
     <>
-      <Percentage value={value}>{((value / max) * 100).toFixed(0)}%</Percentage>
-      <HpBar value={value} max={max} />
+      <Percentage value={healthBar}>
+        {((healthBar / max) * 100).toFixed(0)}%
+      </Percentage>
+      <HpBar value={healthBar} max={max} />
     </>
   );
 };
@@ -12,7 +14,7 @@ const HealthBar = ({ value, max, min }) => {
 HealthBar.defaultProps = {
   max: 100,
   min: 0,
-  value: 50,
+  value: 100,
 };
 
 export default HealthBar;
