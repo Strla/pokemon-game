@@ -35,14 +35,19 @@ const Game = () => {
   const [playerMiss, setPlayerMiss] = useState(false);
   const [playerDmg, setPlayerDmg] = useState(0);
 
+  const [playerTurn, setPlayerTurn] = useState();
+
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState([]);
 
-  const [playerTurn, setPlayerTurn] = useState(true);
   const [isOver, setIsOver] = useState(false);
 
   const randomIntFromInterval = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const changeTurn = () => {
+    setPlayerTurn(!playerTurn);
   };
 
   const fetchPokemons = async () => {
@@ -87,7 +92,7 @@ const Game = () => {
     setOpponentHealthBar(100);
     setLoading(false);
 
-    if (opponentSpeed >= playerSpeed) {
+    if (opponentData.stats[5].base_stat >= playerData.stats[5].base_stat) {
       setPlayerTurn(false);
     } else {
       setPlayerTurn(true);
@@ -98,13 +103,9 @@ const Game = () => {
     logs.push({ id: id, message: message });
   };
 
-  const changeTurn = () => {
-    setPlayerTurn(!playerTurn);
-  };
-
   const changeValue = () => {
     let chance = Math.random();
-    if (playerHp > 0 && playerTurn) {
+    if (opponentHp > 0 && !playerTurn) {
       if (chance <= 0.2) {
         addToLog(
           nanoid(),
@@ -151,7 +152,7 @@ const Game = () => {
         setPlayerHp(newHp);
         setPlayerHealthBar(percentage);
       }
-    } else if (opponentHp > 0 && !playerTurn) {
+    } else if (playerHp > 0 && playerTurn) {
       if (chance <= 0.2) {
         addToLog(
           nanoid(),
@@ -210,7 +211,6 @@ const Game = () => {
 
   useEffect(() => {
     fetchPokemons();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -242,7 +242,7 @@ const Game = () => {
           gameOver={isOver}
         />
         <Wrapper>
-          <ArrowIcon turn={playerTurn} />
+          <ArrowIcon turn={!playerTurn} />
           <Button onClick={() => changeValue()}>Attack!</Button>
         </Wrapper>
         <Pokemon
