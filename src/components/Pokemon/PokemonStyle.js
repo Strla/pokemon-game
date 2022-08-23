@@ -3,6 +3,13 @@ import { colors } from "../../lib/style/theme";
 
 export const PlayerContainer = styled.div`
   margin: 30px 50px;
+
+  ${(props) =>
+    props.gameOver &&
+    `
+    opacity: 30%
+
+  `}
 `;
 
 export const HealthContainer = styled.div`
@@ -34,4 +41,21 @@ export const StatContainer = styled.div`
   border-radius: 20px;
   border: 4px solid ${colors.yellow};
   padding: 20px 20px;
+`;
+
+export const Miss = styled.p`
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  rotate: -25deg;
+  margin-bottom: 10px;
+`;
+
+export const Damage = styled.span`
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  rotate: 25deg;
+  margin: 10px;
+  color: ${colors.red};
 `;

@@ -47,6 +47,13 @@ export const LogsAndMenuContainer = styled.div`
   margin: 30px 50px;
   align-content: "space-around";
   gap: calc(10%);
+
+  ${(props) =>
+    props.gameOver &&
+    `
+      justify-content: center;
+      align-items: center;
+    `}
 `;
 
 export const LogoImg = styled.img`
@@ -76,7 +83,7 @@ export const ArrowIcon = styled(Arrow)`
   margin-bottom: 25px;
 
   ${(props) =>
-    props.myTurn &&
+    props.turn &&
     `
       rotate: 180deg;
 
@@ -89,4 +96,16 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const WinnerTitle = styled.p`
+  font-size: 40px;
+  font-weight: bold;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 10%;
+  left: 0;
+  right: 0;
+  text-align: center;
 `;

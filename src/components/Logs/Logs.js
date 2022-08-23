@@ -1,9 +1,9 @@
 import { LogsContainer, LogsTitle, LogsWrapper } from "./LogsStyle";
 
-const Logs = ({ logs }) => {
+const Logs = ({ logs, gameOver }) => {
   return (
     <>
-      <LogsWrapper>
+      <LogsWrapper gameOver={gameOver}>
         <LogsTitle>Logs</LogsTitle>
         <LogsContainer>
           {logs.map((log) => {

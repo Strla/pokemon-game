@@ -1,6 +1,8 @@
 import {
+  Damage,
   HealthContainer,
   InfoContainer,
+  Miss,
   NameAndImgContainer,
   PlayerContainer,
   PlayerImg,
@@ -20,14 +22,21 @@ const Pokemon = ({
   speed,
   img,
   healthBar,
-  miss,
+  opponentMiss,
+  playerMiss,
+  opponentDamage,
+  playerDamage,
+  gameOver,
 }) => {
   return (
     <>
-      <PlayerContainer>
+      <PlayerContainer gameOver={gameOver}>
         <HealthContainer>
+          {playerMiss && <Miss>Miss!</Miss>}
+          {opponentMiss && <Miss>Miss!</Miss>}
           <HealthBar healthBar={healthBar} />
-          {miss && <p>Miss!</p>}
+          {opponentDamage > 0 && <Damage>{opponentDamage}dmg!</Damage>}
+          {playerDamage > 0 && <Damage>{playerDamage}dmg!</Damage>}
         </HealthContainer>
         <NameAndImgContainer>
           <PlayerName>

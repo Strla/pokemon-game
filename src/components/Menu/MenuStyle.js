@@ -3,10 +3,11 @@ import { colors } from "../../lib/style/theme";
 
 export const MenuWrapper = styled.div`
   ${(props) =>
-    props.isOver &&
+    props.gameOver &&
     `
-      visibility: hidden;
-
+    position: absolute;
+    top: 40%;
+    left: 40%;
   `}
 `;
 export const MenuTitle = styled.h3``;
